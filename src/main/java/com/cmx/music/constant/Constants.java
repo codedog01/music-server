@@ -5,5 +5,5 @@ public class Constants {
     public static final String RESOURCE_MAC_PATH = "/tmp/music-website/music-server";
 
     // windos系统
-    public static final String RESOURCE_WIN_PATH = "C:\\Java\\music-website\\music-server";
+    public static final String RESOURCE_WIN_PATH = "D:\\music-server";
 }

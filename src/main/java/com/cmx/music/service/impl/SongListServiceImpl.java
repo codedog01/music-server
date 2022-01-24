@@ -16,7 +16,7 @@ public class SongListServiceImpl implements SongListService {
 
     @Override
     public boolean updateSongListMsg(SongList songList) {
-        return songListMapper.updateSongListMsg(songList) >0 ?true:false;
+        return songListMapper.updateSongListMsg(songList) > 0;
     }
 
     @Override

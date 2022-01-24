@@ -88,10 +88,9 @@ public class SongListController {
     }
 
 //    返回指定类型的歌单
-    @RequestMapping(value = "/songList/style/detail", method = RequestMethod.GET)
-    public Object songListOfStyle(HttpServletRequest req){
-        String style = req.getParameter("style").trim();
-        return songListService.likeStyle('%'+ style + '%');
+    @GetMapping(value = "/songList/style/detail")
+    public Object songListOfStyle(String style){
+        return songListService.likeStyle("%"+style+"%");
     }
 
 //    删除歌单

@@ -1,10 +1,12 @@
 package com.cmx.music.pojo;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 @Data
 
+@EqualsAndHashCode(callSuper = false)
 public class Song {
 
     private Integer id;

@@ -14,12 +14,14 @@ public class RankServiceImpl implements RankService {
 
     @Override
     public int rankOfSongListId(Long songListId) {
-        return rankMapper.selectScoreSum(songListId) / rankMapper.selectRankNum(songListId);
+        int i = rankMapper.selectScoreSum(songListId);
+        int a = rankMapper.selectRankNum(songListId);
+        return a == 0 ? 0 : i / a;
     }
 
     @Override
     public boolean addRank(Rank rank) {
 
-        return rankMapper.insertSelective(rank) > 0 ? true:false;
+        return rankMapper.insertSelective(rank) > 0;
     }
 }

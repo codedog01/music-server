@@ -2,6 +2,8 @@ server:
   servlet:
     context-path: /
   port: 8888
+  tomcat:
+    uri-encoding: UTF-8
 
 spring:
   application:
@@ -18,10 +20,12 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     password: root
     username: root
-    url: jdbc:mysql://localhost:3306/cmx_music
+    url: jdbc:mysql://localhost:3306/cmx_music?userUnicode=true&characterEncoding=utf-8
 mybatis:
+  mapper-locations: com/cmx/music/dao/xml/*.xml
   type-aliases-package: com.cmx.music.pojo
-  mapper-locations: com.cmx.music.dao.xml/*.xml
 
 
-
+logging:
+  level:
+    com.cmx.music: DEBUG
