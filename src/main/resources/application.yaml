@@ -4,6 +4,9 @@ server:
   port: 8888
   tomcat:
     uri-encoding: UTF-8
+logging:
+  level:
+    com.cmx.music: DEBUG
 
 spring:
   application:
@@ -26,6 +29,3 @@ mybatis:
   type-aliases-package: com.cmx.music.pojo
 
 
-logging:
-  level:
-    com.cmx.music: DEBUG
