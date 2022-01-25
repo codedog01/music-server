@@ -17,17 +17,13 @@ public class AdminController {
 //    判断是否登录成功
     @ResponseBody
     @PostMapping(value = "/admin/login/status")
-    public Object loginStatus(HttpServletRequest req, HttpSession session){
+    public Object loginStatus(String username,String password, HttpSession session){
         JSONObject jsonObject = new JSONObject();
-
-        String name = req.getParameter("name");
-        String password = req.getParameter("password");
-
-        boolean res = adminService.veritypasswd(name, password);
+        boolean res = adminService.veritypasswd(username, password);
         if (res) {
             jsonObject.put("code", 1);
             jsonObject.put("msg", "登录成功");
-            session.setAttribute("name", name);
+            session.setAttribute("name", username);
             return jsonObject;
         } else {
             jsonObject.put("code", 0);

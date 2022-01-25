@@ -210,17 +210,18 @@ public class ConsumerController {
 
         if (avatorFile.isEmpty()) {
             jsonObject.put("code", 0);
-            jsonObject.put("msg", "文件上传失败！");
+            jsonObject.put("msg", "上传内容为空！");
             return jsonObject;
         }
         String fileName = System.currentTimeMillis()+avatorFile.getOriginalFilename();
-        String filePath = System.getProperty("user.dir") + System.getProperty("file.separator") + "img" + System.getProperty("file.separator") + "avatorImages" ;
-        File file1 = new File(filePath);
-        if (!file1.exists()){
-            file1.mkdir();
+        String filePath =Constants.RESOURCE_WIN_PATH+ "\\img\\avatorImages" ;
+        File file = new File(filePath);
+        if (!file.exists()){
+            file.mkdir();
         }
 
-        File dest = new File(filePath + System.getProperty("file.separator") + fileName);
+        File dest = new File(filePath + '\\' + fileName);
+
         String storeAvatorPath = "/img/avatorImages/"+fileName;
         try {
             avatorFile.transferTo(dest);

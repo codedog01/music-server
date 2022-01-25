@@ -20,7 +20,7 @@ public interface ConsumerMapper {
 
     int updateByPrimaryKey(Consumer record);
 
-    int verifyPassword(String username, String password);
+    Consumer verifyPassword(String username, String password);
 
     int existUsername(String username);
 

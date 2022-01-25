@@ -27,24 +27,23 @@ public class ConsumerServiceImpl implements ConsumerService {
     @Override
     public boolean updateUserAvator(Consumer consumer) {
 
-        return consumerMapper.updateUserAvator(consumer) >0 ?true:false;
+        return consumerMapper.updateUserAvator(consumer) > 0;
     }
 
     @Override
     public boolean existUser(String username) {
-        return consumerMapper.existUsername(username)>0 ? true:false;
+        return consumerMapper.existUsername(username) > 0;
     }
 
     @Override
     public boolean veritypasswd(String username, String password) {
-
-        return consumerMapper.verifyPassword(username, password)>0?true:false;
+        return consumerMapper.verifyPassword(username, password) != null;
     }
 
 //    删除用户
     @Override
     public boolean deleteUser(Integer id) {
-        return consumerMapper.deleteUser(id) >0 ?true:false;
+        return consumerMapper.deleteUser(id) > 0;
     }
 
     @Override
