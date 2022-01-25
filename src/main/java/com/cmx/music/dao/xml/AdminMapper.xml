@@ -19,7 +19,7 @@
   </sql>
 
   <select id="verifyPassword" resultType="java.lang.Integer">
-    SELECT count(*) FROM admin where name = #{0} and password = #{1} ;
+    SELECT count(*) FROM admin where name = #{username} and password = #{password} ;
   </select>
 
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
