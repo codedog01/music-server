@@ -57,6 +57,6 @@ public class SongListServiceImpl implements SongListService {
     @Override
     public boolean updateSongListImg(SongList songList) {
 
-        return songListMapper.updateSongListImg(songList) >0 ?true:false;
+        return songListMapper.updateSongListImg(songList) > 0;
     }
 }

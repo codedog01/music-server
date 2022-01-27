@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.cmx.music.constant.Constants;
 import com.cmx.music.pojo.SongList;
 import com.cmx.music.service.impl.SongListServiceImpl;
+import com.cmx.music.utils.AliOSSUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,9 @@ public class SongListController {
 
     @Autowired
     private SongListServiceImpl songListService;
+
+    @Autowired
+    AliOSSUtils aliOSSUtils;
 
     @Configuration
     public class MyPicConfig implements WebMvcConfigurer {
@@ -141,24 +145,17 @@ public class SongListController {
             jsonObject.put("msg", "文件上传失败！");
             return jsonObject;
         }
-        String fileName = System.currentTimeMillis()+avatorFile.getOriginalFilename();
-        String filePath = System.getProperty("user.dir") + System.getProperty("file.separator") + "img" + System.getProperty("file.separator") + "songListPic" ;
-        File file1 = new File(filePath);
-        if (!file1.exists()){
-            file1.mkdir();
-        }
-
-        File dest = new File(filePath + System.getProperty("file.separator") + fileName);
-        String storeAvatorPath = "/img/songListPic/"+fileName;
+        String filePath = "music-server/img/songListPic/";
+        String fileName = aliOSSUtils.uploadFile(avatorFile, filePath);
+        String storeAvatarPath = "/img/songListPic/" + fileName;
         try {
-            avatorFile.transferTo(dest);
             SongList songList = new SongList();
             songList.setId(id);
-            songList.setPic(storeAvatorPath);
+            songList.setPic(storeAvatarPath);
             boolean res = songListService.updateSongListImg(songList);
             if (res){
                 jsonObject.put("code", 1);
-                jsonObject.put("avator", storeAvatorPath);
+                jsonObject.put("avator", storeAvatarPath);
                 jsonObject.put("msg", "上传成功");
                 return jsonObject;
             }else {
@@ -166,11 +163,7 @@ public class SongListController {
                 jsonObject.put("msg", "上传失败");
                 return jsonObject;
             }
-        }catch (IOException e){
-            jsonObject.put("code", 0);
-            jsonObject.put("msg", "上传失败" + e.getMessage());
-            return jsonObject;
-        }finally {
+        } finally {
             return jsonObject;
         }
     }

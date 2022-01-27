@@ -1,3 +1,6 @@
+spring:
+  application:
+    name: music-server
 server:
   servlet:
     context-path: /
@@ -7,17 +10,9 @@ server:
 logging:
   level:
     com.cmx.music: DEBUG
-
+---
 spring:
-  application:
-    name: music-server
-  servlet:
-    multipart:
-      max-file-size: 50MB
-      max-request-size: 50MB
-  jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: GMT+8
+  profiles: local
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
@@ -27,5 +22,3 @@ spring:
 mybatis:
   mapper-locations: com/cmx/music/dao/xml/*.xml
   type-aliases-package: com.cmx.music.pojo
-
-

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.cmx.music.pojo.Song;
 import com.cmx.music.service.impl.SongServiceImpl;
 import com.cmx.music.constant.Constants;
+import com.cmx.music.utils.AliOSSUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +30,8 @@ public class SongController {
     @Autowired
     private SongServiceImpl songService;
 
+    @Autowired
+    AliOSSUtils aliOSSUtils;
     @Bean
     public MultipartConfigElement multipartConfigElement() {
         MultipartConfigFactory factory = new MultipartConfigFactory();
@@ -68,23 +71,10 @@ public class SongController {
         String introduction = req.getParameter("introduction").trim();
         String pic = "/img/songPic/tubiao.jpg";
         String lyric = req.getParameter("lyric").trim();
-
-        if (mpfile.isEmpty()) {
-            jsonObject.put("code", 0);
-            jsonObject.put("msg", "音乐上传失败！");
-            return jsonObject;
-        }
-        String fileName = mpfile.getOriginalFilename();
-        String filePath = System.getProperty("user.dir") + System.getProperty("file.separator") + "song";
-        File file1 = new File(filePath);
-        if (!file1.exists()){
-            file1.mkdir();
-        }
-
-        File dest = new File(filePath + System.getProperty("file.separator") + fileName);
+        String filePath = "music-server/song/";
+        String fileName = aliOSSUtils.uploadFile(mpfile, filePath);
         String storeUrlPath = "/song/"+fileName;
         try {
-            mpfile.transferTo(dest);
             Song song = new Song();
             song.setSingerId(Integer.parseInt(singer_id));
             song.setName(name);
@@ -105,10 +95,6 @@ public class SongController {
                 jsonObject.put("msg", "上传失败");
                 return jsonObject;
             }
-        } catch (IOException e) {
-            jsonObject.put("code", 0);
-            jsonObject.put("msg", "上传失败" + e.getMessage());
-            return jsonObject;
         } finally {
             return jsonObject;
         }
@@ -197,17 +183,10 @@ public class SongController {
             jsonObject.put("msg", "音乐上传失败！");
             return jsonObject;
         }
-        String fileName = System.currentTimeMillis()+urlFile.getOriginalFilename();
-        String filePath = System.getProperty("user.dir") + System.getProperty("file.separator") + "img" + System.getProperty("file.separator") + "songPic";
-        File file1 = new File(filePath);
-        if (!file1.exists()){
-            file1.mkdir();
-        }
-
-        File dest = new File(filePath + System.getProperty("file.separator") + fileName);
+        String filePath = "music-server/img/songPic/";
+        String fileName = aliOSSUtils.uploadFile(urlFile, filePath);
         String storeUrlPath = "/img/songPic/"+fileName;
         try {
-            urlFile.transferTo(dest);
             Song song = new Song();
             song.setId(id);
             song.setPic(storeUrlPath);
@@ -222,11 +201,7 @@ public class SongController {
                 jsonObject.put("msg", "上传失败");
                 return jsonObject;
             }
-        }catch (IOException e){
-            jsonObject.put("code", 0);
-            jsonObject.put("msg", "上传失败" + e.getMessage());
-            return jsonObject;
-        }finally {
+        } finally {
             return jsonObject;
         }
     }
@@ -242,17 +217,11 @@ public class SongController {
             jsonObject.put("msg", "音乐上传失败！");
             return jsonObject;
         }
-        String fileName = urlFile.getOriginalFilename();
-        String filePath = System.getProperty("user.dir") + System.getProperty("file.separator") + "song";
-        File file1 = new File(filePath);
-        if (!file1.exists()){
-            file1.mkdir();
-        }
+        String filePath = "music-server/song/";
+        String fileName = aliOSSUtils.uploadFile(urlFile, filePath);
 
-        File dest = new File(filePath + System.getProperty("file.separator") + fileName);
         String storeUrlPath = "/song/"+fileName;
         try {
-            urlFile.transferTo(dest);
             Song song = new Song();
             song.setId(id);
             song.setUrl(storeUrlPath);
@@ -267,11 +236,7 @@ public class SongController {
                 jsonObject.put("msg", "上传失败");
                 return jsonObject;
             }
-        }catch (IOException e){
-            jsonObject.put("code", 0);
-            jsonObject.put("msg", "上传失败" + e.getMessage());
-            return jsonObject;
-        }finally {
+        } finally {
             return jsonObject;
         }
     }

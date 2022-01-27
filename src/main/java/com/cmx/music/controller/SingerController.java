@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.cmx.music.constant.Constants;
 import com.cmx.music.pojo.Singer;
 import com.cmx.music.service.impl.SingerServiceImpl;
+import com.cmx.music.utils.AliOSSUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,9 @@ import java.util.Date;
 @RestController
 @Controller
 public class SingerController {
+
+    @Autowired
+    AliOSSUtils aliOSSUtils;
 
     @Autowired
     private SingerServiceImpl singerService;
@@ -159,17 +163,10 @@ public class SingerController {
             jsonObject.put("msg", "文件上传失败！");
             return jsonObject;
         }
-        String fileName = System.currentTimeMillis()+avatorFile.getOriginalFilename();
-        String filePath = System.getProperty("user.dir") + System.getProperty("file.separator") + "img" + System.getProperty("file.separator") + "singerPic" ;
-        File file1 = new File(filePath);
-        if (!file1.exists()){
-            file1.mkdir();
-        }
-
-        File dest = new File(filePath + System.getProperty("file.separator") + fileName);
+        String filePath = "music-server/img/singerPic/";
+        String fileName = aliOSSUtils.uploadFile(avatorFile, filePath);
         String storeAvatorPath = "/img/singerPic/"+fileName;
         try {
-            avatorFile.transferTo(dest);
             Singer singer = new Singer();
             singer.setId(id);
             singer.setPic(storeAvatorPath);
@@ -184,11 +181,7 @@ public class SingerController {
                 jsonObject.put("msg", "上传失败");
                 return jsonObject;
             }
-        }catch (IOException e){
-            jsonObject.put("code", 0);
-            jsonObject.put("msg", "上传失败" + e.getMessage());
-            return jsonObject;
-        }finally {
+        } finally {
             return jsonObject;
         }
     }

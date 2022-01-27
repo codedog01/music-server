@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.cmx.music.constant.Constants;
 import com.cmx.music.pojo.Consumer;
 import com.cmx.music.service.impl.ConsumerServiceImpl;
+import com.cmx.music.utils.AliOSSUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,9 @@ public class ConsumerController {
 
     @Autowired
     private ConsumerServiceImpl consumerService;
+
+    @Autowired
+    AliOSSUtils aliOSSUtils;
 
     @Configuration
     public class MyPicConfig implements WebMvcConfigurer {
@@ -73,7 +77,7 @@ public class ConsumerController {
         consumer.setUsername(username);
         consumer.setPassword(password);
         consumer.setSex(new Byte(sex));
-        if (phone_num == "") {
+        if (phone_num.equals("")) {
             consumer.setPhoneNum(null);
         } else{
             consumer.setPhoneNum(phone_num);
@@ -213,18 +217,11 @@ public class ConsumerController {
             jsonObject.put("msg", "上传内容为空！");
             return jsonObject;
         }
-        String fileName = System.currentTimeMillis()+avatorFile.getOriginalFilename();
-        String filePath =Constants.RESOURCE_WIN_PATH+ "\\img\\avatorImages" ;
-        File file = new File(filePath);
-        if (!file.exists()){
-            file.mkdir();
-        }
-
-        File dest = new File(filePath + '\\' + fileName);
+        String filePath = "music-server/img/avatorImages/";
+        String fileName = aliOSSUtils.uploadFile(avatorFile, filePath);
 
         String storeAvatorPath = "/img/avatorImages/"+fileName;
         try {
-            avatorFile.transferTo(dest);
             Consumer consumer = new Consumer();
             consumer.setId(id);
             consumer.setAvator(storeAvatorPath);
@@ -239,11 +236,7 @@ public class ConsumerController {
                 jsonObject.put("msg", "上传失败");
                 return jsonObject;
             }
-        }catch (IOException e){
-            jsonObject.put("code", 0);
-            jsonObject.put("msg", "上传失败"+e.getMessage());
-            return jsonObject;
-        }finally {
+        } finally {
             return jsonObject;
         }
     }
